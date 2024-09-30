@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">  <meta charset="UTF-8">
+  <link rel="stylesheet" href="/styles/main.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+  <title>Muse</title>
+</head>
+<body class = "home">
+    <div id = "headerDiv">
+        <h1 id ="museHomeHeader">Muse</h1>
+        <button class="cameraButton">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" viewBox="0 0 24 24" height="24" fill="none" class="svg-icon">
+              <g stroke-width="2" stroke-linecap="round" stroke="#fff" fill-rule="evenodd" clip-rule="evenodd">
+                <path d="m4 9c0-1.10457.89543-2 2-2h2l.44721-.89443c.33879-.67757 1.03131-1.10557 1.78889-1.10557h3.5278c.7576 0 1.4501.428 1.7889 1.10557l.4472.89443h2c1.1046 0 2 .89543 2 2v8c0 1.1046-.8954 2-2 2h-12c-1.10457 0-2-.8954-2-2z"></path>
+                <path d="m15 13c0 1.6569-1.3431 3-3 3s-3-1.3431-3-3 1.3431-3 3-3 3 1.3431 3 3z"></path>
+              </g>
+            </svg>
+            <span class="label">Songs for your mood</span>
+          </button>
+          
+          <div id="cameraContainer" style="display:none;">
+            <video id="cameraFeed" autoplay></video>
+            <button id="captureButton">Capture</button>
+            <button id="closeButton">X</button>
+          </div>
+    </div>
+        <div class = "row songPlayer">
+            <% songs.forEach(song => { %>
+                <div class="song-tile col-3">
+                    <!-- Display album artwork -->
+                    <img class="song-image" src="<%= song.track.album.images[0].url %>" alt="Album Artwork">
+                    <!-- Display song name -->
+                    <div class = "songTitle">
+                        <p class = "songName"><%= song.track.name %></p>
+                        <!-- Display song artists -->
+                        <p class = "songName"><%= song.track.artists.map(artist => artist.name).join(', ') %></p>
+                    </div>
+                    
+                    <!-- Play/Pause buttons -->
+                    <button class="play-pause-button" onclick="playPause(this, '<%= song.track.preview_url %>')">
+                        <i class="fas fa-play"></i> <!-- Initially show play icon -->
+                    </button>            </div>
+            <% }); %>
+            
+        </div>
+  <script src="https://sdk.scdn.co/spotify-player.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- jQuery CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+  <script>
+    window.onSpotifyWebPlaybackSDKReady = () => {
+      const token = '[My access token]'; // Replace this with your actual access token
+      const player = new Spotify.Player({
+        name: 'Web Playback SDK Player',
+        getOAuthToken: cb => { cb(token); }
+      });
+
+      // Error handling
+      player.addListener('initialization_error', ({ message }) => { console.error(message); });
+      player.addListener('authentication_error', ({ message }) => { console.error(message); });
+      player.addListener('account_error', ({ message }) => { console.error(message); });
+      player.addListener('playback_error', ({ message }) => { console.error(message); });
+
+      // Playback status updates
+      player.addListener('player_state_changed', state => { console.log(state); });
+
+      // Ready
+      player.addListener('ready', ({ device_id }) => {
+        console.log('Ready with Device ID', device_id);
+      });
+
+      // Connect to the player!
+      player.connect();
+      
+    };
+    let audioPlayer = null;
+
+    function playPause(button, previewUrl) {
+        if (!audioPlayer || audioPlayer.src !== previewUrl) {
+            // If no audio player or different preview URL, create new audio player
+            if (audioPlayer) {
+                // Reset previous play/pause button
+                const prevButton = document.querySelector('.play-pause-button.playing');
+                if (prevButton) {
+                    prevButton.classList.remove('playing');
+                    prevButton.innerHTML = '<i class="fas fa-play"></i>'; // Change icon to play
+                }
+            }
+            audioPlayer = new Audio(previewUrl);
+            audioPlayer.play();
+            button.classList.add('playing');
+            button.innerHTML = '<i class="fas fa-pause"></i>'; // Change icon to pause
+        } else if (audioPlayer.paused) {
+            // If paused, resume playback
+            audioPlayer.play();
+            button.classList.add('playing');
+            button.innerHTML = '<i class="fas fa-pause"></i>'; // Change icon to pause
+        } else {
+            // If playing, pause playback
+            audioPlayer.pause();
+            button.classList.remove('playing');
+            button.innerHTML = '<i class="fas fa-play"></i>'; // Change icon to play
+        }
+    }
+    function startCamera() {
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => {
+            const videoElement = document.getElementById('cameraFeed');
+            videoElement.srcObject = stream;
+            })
+            .catch(error => {
+            console.error('Error accessing camera:', error);
+            });
+    }
+    $('.cameraButton').click(function() {
+      $('#cameraContainer').css("display","block");  
+      startCamera();
+    });
+    // Capture button event listener
+  $('#captureButton').click(function() {
+    const videoElement = document.getElementById('cameraFeed');
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('2d');
+
+    // Set canvas dimensions to match video element
+    canvas.width = videoElement.videoWidth;
+    canvas.height = videoElement.videoHeight;
+
+    // Draw current frame from video element onto canvas
+    context.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+
+    // Convert canvas content to data URL (base64 encoded)
+    const dataUrl = canvas.toDataURL('image/jpeg');
+
+    // You can display the captured image
+    const capturedImage = document.createElement('img');
+    capturedImage.src = dataUrl;
+    document.body.appendChild(capturedImage);
+
+  });
+
+  // Close button event listener
+  $('#closeButton').click(function() {
+    $('#cameraContainer').hide(); // Hide camera container
+    const videoElement = document.getElementById('cameraFeed');
+    videoElement.srcObject.getTracks().forEach(track => track.stop()); // Stop camera feed
+  });
+
+
+  </script>
+</body>
+</html>

@@ -1,0 +1,296 @@
+body{
+  background-image: url(../image/background.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  font-family: Arial, sans-serif;
+  padding-top:5% !important;
+}
+#museHeader{
+  font-size: 2rem;
+  font-weight: bold;
+  color: #fff;
+  margin-left:15%;
+}
+#museHomeHeader{
+  font-size: 2rem;
+  font-weight: bold;
+  color: #fff;
+  text-align: center;
+}
+.main {
+  position: relative;
+  display: flex;
+  width:30%;
+  flex-direction: column;
+  background-color: #240046;
+  max-height: 550px;
+  overflow: hidden;
+  border-radius: 12px;
+  margin-left:5%;
+  box-shadow: 7px 7px 10px 3px #24004628;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 24px;
+}
+
+/*checkbox to switch from sign up to login*/
+#chk {
+  display: none;
+}
+
+/*Login*/
+.login {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.login label {
+  margin: 25% 0 5%;
+}
+
+label {
+  color: #fff;
+  font-size: 2rem;
+  justify-content: center;
+  display: flex;
+  font-weight: bold;
+  cursor: pointer;
+  transition: .5s ease-in-out;
+}
+
+.input {
+  width: 100%;
+  height: 40px;
+  background: #e0dede;
+  padding: 10px;
+  border: none;
+  outline: none;
+  border-radius: 4px;
+}
+
+/*Register*/
+.register {
+  background: #eee;
+  border-radius: 60% / 10%;
+  transform: translateY(5%);
+  transition: .8s ease-in-out;
+}
+
+.register label {
+  color: #573b8a;
+  transform: scale(.6);
+}
+
+#chk:checked ~ .register {
+  transform: translateY(-50%);
+}
+
+#chk:checked ~ .register label {
+  transform: scale(1);
+  margin: 10% 0 5%;
+}
+
+#chk:checked ~ .login label {
+  transform: scale(.6);
+  margin: 5% 0 5%;
+}   
+/*Button*/
+.form button {
+  width: 85%;
+  height: 40px;
+  margin: 12px auto 10%;
+  color: #fff;
+  background: #573b8a;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: .2s ease-in;
+}
+
+.form button:hover {
+  background-color: #6d44b8;
+}
+.error{
+  color:red;
+}
+/* Add your CSS for home page here */
+.home{
+  background-image: url(../image/background.jpg) !important;
+  background-repeat: no-repeat !important;
+  background-size: cover !important;
+  font-family: Arial, sans-serif !important;
+  padding-top:0% !important;
+
+}
+.song-tile {
+  display: inline-block;
+  width: 200px;
+  margin: 10px;
+  border: 1px solid #ccc;
+  text-align: center;
+  height:300px;
+}
+.song-image {
+  width: 50% !important;
+  height: 50% !important;
+  margin-bottom: 10px !important;
+  padding-top: 1.5%;
+}
+.songName{
+  font-size: 1rem;
+  font-weight: bold;
+  color: #fff;
+}
+.songPlayer{
+  padding-left: 15%;
+  margin-top:10%;
+}
+.play-pause-button {
+  background-color:#0B60B0;
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+}
+.play-pause-button i {
+  color: #fff;
+  font-size: 24px;
+}
+.pageDiv{
+  text-align: center;
+}   
+a{
+  color: #fff;
+}
+.cameraButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 9px 12px;
+  gap: 8px;
+  height: 40px;
+  width: 250px;
+  border: none;
+  background: #0B60B0;
+  border-radius: 20px;
+  cursor: pointer;
+  margin-left:42%;
+}
+
+.cameraButton>.lable {
+  line-height: 22px;
+  font-size: 17px;
+  color: #fff;
+  font-family: sans-serif;
+  letter-spacing: 1px;
+}
+
+.cameraButton:hover {
+  background: #0B60B0;
+}
+
+.cameraButton:hover .svg-icon {
+  animation: flickering 2s linear infinite;
+}
+
+@keyframes flickering {
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  52% {
+    opacity: 1;
+  }
+
+  54% {
+    opacity: 0;
+  }
+
+  56% {
+    opacity: 1;
+  }
+
+  90% {
+    opacity: 1;
+  }
+
+  92% {
+    opacity: 0;
+  }
+
+  94% {
+    opacity: 1;
+  }
+
+  96% {
+    opacity: 0;
+  }
+
+  98% {
+    opacity: 1;
+  }
+
+  99% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+#cameraContainer {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10000; /* Ensure it's above overlay */
+}
+
+#cameraFeed {
+  width: 300px; /* Adjust width as needed */
+  height: auto;
+  border: 2px solid #ccc;
+}
+
+#captureButton, #closeButton {
+  position: absolute;
+  z-index: 1;
+}
+
+#captureButton {
+  top: 180px; /* Adjust top position as needed */
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #F0EDCF;
+}
+
+#closeButton {
+  top: 0px;
+  right: 1px;
+  cursor: pointer;
+  border-radius: 50%;
+  background-color: #F0EDCF;
+}
+#headerDiv{
+  width:100%;
+  text-align: center;
+  background-color: #40A2D8;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000; /* Ensure it's above other content */
+  padding: 10px 0; /* Adjust padding as needed */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+}
